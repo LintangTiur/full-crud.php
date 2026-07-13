@@ -73,73 +73,95 @@ if (isset($_POST['ubah'])) {
 
 <?php include 'layout/header.php'; ?>
 
-<div class="container mt-5">
-    <h1>Data akun</h1>
-    <hr>
+<!-- PERBAIKAN UTAMA: Menggunakan wrapper AdminLTE agar tidak tertutup sidebar -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">Data Akun</h1>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <?php if ($_SESSION['level'] == 1) : ?>
-    <button type="button" class="btn btn-primary mb-1" data-bs-toggle="modal" data-bs-target="#modalTambah">
-        <i class="fas fa-plus-circle"></i> Tambah </button>
-    <?php endif; ?> <!-- PERBAIKAN 1: Sudah ditutup dengan benar di sini -->
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <!-- Menggunakan Card AdminLTE agar tampilan tabel lebih rapi dan clean -->
+            <div class="card">
+                <div class="card-body">
+                    
+                    <?php if ($_SESSION['level'] == 1) : ?>
+                    <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#modalTambah">
+                        <i class="fas fa-plus-circle"></i> Tambah 
+                    </button>
+                    <?php endif; ?>
 
-    <table class="table table-bordered table-striped" id="table">
-        <thead>
-            <tr>
-                <th>No</th>
-                <th>Nama</th>
-                <th>Username</th>
-                <th>Email</th>
-                <th>Password</th>
-                <th>Level</th> 
-                <th>Aksi</th>
-            </tr>
-        </thead>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped" id="table">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Nama</th>
+                                    <th>Username</th>
+                                    <th>Email</th>
+                                    <th>Password</th>
+                                    <th>Level</th> 
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
 
-        <tbody>
-            <?php $no = 1; ?>
-            <?php if ($_SESSION['level'] == 1) : ?>
-                <!-- Menampilkan semua data jika login sebagai Admin -->
-                <?php foreach ($data_akun as $akun) : ?>
-                    <tr>
-                        <td><?= $no++; ?></td>
-                        <td><?= $akun['nama']; ?></td>
-                        <td><?= $akun['username']; ?></td>
-                        <td><?= $akun['email']; ?></td>
-                        <td><?= $akun['password']; ?></td>
-                        <td><?= $akun['level'] == 1 ? 'Admin' : 'Operator'; ?></td> 
-                        <td class="text-center" width="15%">
-                            <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalUbah<?= $akun['id_akun']; ?>">
-                                <i class="fas fa-edit"></i> Ubah
-                            </button>
-                            <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#modalHapus<?= $akun['id_akun']; ?>">
-                                <i class="fas fa-trash-alt"></i> Hapus
-                            </button>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-            <?php else : ?>
+                            <tbody>
+                                <?php $no = 1; ?>
+                                <?php if ($_SESSION['level'] == 1) : ?>
+                                    <!-- Menampilkan semua data jika login sebagai Admin -->
+                                    <?php foreach ($data_akun as $akun) : ?>
+                                        <tr>
+                                            <td><?= $no++; ?></td>
+                                            <td><?= $akun['nama']; ?></td>
+                                            <td><?= $akun['username']; ?></td>
+                                            <td><?= $akun['email']; ?></td>
+                                            <td><?= $akun['password']; ?></td>
+                                            <td><?= $akun['level'] == 1 ? 'Admin' : 'Operator'; ?></td> 
+                                            <td class="text-center">
+                                                <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalUbah<?= $akun['id_akun']; ?>">
+                                                    <i class="fas fa-edit"></i> Ubah
+                                                </button>
+                                                <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#modalHapus<?= $akun['id_akun']; ?>">
+                                                    <i class="fas fa-trash-alt"></i> Hapus
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                <?php else : ?>
+                                    <!-- Menampilkan data milik user itu sendiri jika login sebagai Operator -->
+                                    <?php foreach ($data_bylogin as $akun) : ?>
+                                        <tr>
+                                            <td><?= $no++; ?></td>
+                                            <td><?= $akun['nama']; ?></td>
+                                            <td><?= $akun['username']; ?></td>
+                                            <td><?= $akun['email']; ?></td>
+                                            <td><?= $akun['password']; ?></td>
+                                            <td><?= $akun['level'] == 1 ? 'Admin' : 'Operator'; ?></td> 
+                                            <td class="text-center">
+                                                <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalUbah<?= $akun['id_akun']; ?>">
+                                                    <i class="fas fa-edit"></i> Ubah
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
+                            </tbody>
+                        </table>
+                    </div>
 
-                <!-- PERBAIKAN 2: Menampilkan data milik user itu sendiri jika login sebagai Operator -->
-                <?php foreach ($data_bylogin as $akun) : ?>
-                    <tr>
-                        <td><?= $no++; ?></td>
-                        <td><?= $akun['nama']; ?></td>
-                        <td><?= $akun['username']; ?></td>
-                        <td><?= $akun['email']; ?></td>
-                        <td><?= $akun['password']; ?></td>
-                        <td><?= $akun['level'] == 1 ? 'Admin' : 'Operator'; ?></td> 
-                        <td class="text-center" width="15%">
-                            <!-- Operator biasanya hanya bisa ubah data sendiri, tombol hapus disembunyikan -->
-                            <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalUbah<?= $akun['id_akun']; ?>">
-                                <i class="fas fa-edit"></i> Ubah
-                            </button>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-            <?php endif; ?>
-        </tbody>
-    </table>
-</div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div> <!-- Penutup content-wrapper -->
 
 <!-- Modal Tambah -->
 <div class="modal fade" id="modalTambah" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
