@@ -2,7 +2,7 @@
 
 session_start();
 //password sementara
-//echo password_hash("123456", PASSWORD_DEFAULT); die();
+//echo password_hash("admin", PASSWORD_DEFAULT); die(); 
 
 include 'config/app.php';
 
@@ -19,8 +19,8 @@ if (isset($_POST['login'])) {
         //check passwordnya
         $hasil = mysqli_fetch_assoc($result);
 
-        if (($password === $hasil['password'])) {
-            //set session
+        //set session
+            if (password_verify($password, $hasil['password'])); {
             $_SESSION['login']      = true;
             $_SESSION['id_akun']    = $hasil['id_akun'];
             $_SESSION['nama']       = $hasil['nama'];

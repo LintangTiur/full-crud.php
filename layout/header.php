@@ -221,25 +221,25 @@ include 'config/app.php';
                with font-awesome or any other icon font library -->
             <li class="nav-header">Daftar Menu</li>
             <li class="nav-item">
-                <a href="" class="nav-link">
+                <a href="index.php" class="nav-link">
                     <i class="nav-icon fas fa-box"></i>
                     <p>Data Barang</p>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="" class="nav-link">
+                <a href="mahasiswa.php" class="nav-link">
                     <i class="nav-icon fas fa-user-graduate"></i>
                     <p>Data Mahasiswa</p>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="" class="nav-link">
+                <a href="crud-modal.php" class="nav-link">
                     <i class="nav-icon fas fa-user"></i>
                     <p>Data Akun</p>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="" class="nav-link">
+                <a href="logout.php" class="nav-link">
                     <i class="nav-icon fas fa-sign-out-alt"></i>
                     <p>Logout</p>
                 </a>

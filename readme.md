@@ -16,4 +16,3 @@ User Login
 
 3. Akun Operator Mahasiswa
 - username : opmahasiswa
-- password : 123456
