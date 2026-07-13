@@ -66,28 +66,32 @@ function create_mahasiswa($data)
 {
     global $db;
 
+    // Membersihkan input agar aman dari tag HTML berbahaya
     $nama    = strip_tags($data['nama']);
     $prodi   = strip_tags($data['prodi']);
     $jk      = strip_tags($data['jk']);
     $telepon = strip_tags($data['telepon']);
-    $alamat  = $post['alamat'];
+    $alamat  = strip_tags($data['alamat']); // FIXED: Mengubah $post menjadi $data
     $email   = strip_tags($data['email']);
+    
+    // Menjalankan fungsi upload file gambar
     $foto    = upload_file();
 
-    //check upload foto
+    // check upload foto
     if (!$foto) {
         return false;
     }
 
+    // FIXED: Membungkus $alamat dengan kutip tunggal ('$alamat') agar sintaks SQL valid
     $query = "INSERT INTO mahasiswa (id_mahasiswa, nama, prodi, jk, telepon, email, foto, alamat) 
-              VALUES (null, '$nama', '$prodi', '$jk', '$telepon', '$email', '$foto', $alamat)";
+              VALUES (null, '$nama', '$prodi', '$jk', '$telepon', '$email', '$foto', '$alamat')";
 
     mysqli_query($db, $query);
 
     return mysqli_affected_rows($db);
 } 
 
-//fungsi untuk upload file
+// fungsi untuk upload file 
 function upload_file()
 {
     $namaFile = $_FILES['foto']['name'];
@@ -95,14 +99,13 @@ function upload_file()
     $error = $_FILES['foto']['error'];
     $tmpName = $_FILES['foto']['tmp_name'];
 
-    //cek file yang sudah diupload
+    // cek file yang sudah diupload
     $extensiFileValid = ['jpg', 'jpeg', 'png'];
     $extensiFile = explode('.', $namaFile);
     $extensiFile = strtolower(end($extensiFile));
 
-    //cek extensi file
+    // cek extensi file
     if (!in_array($extensiFile, $extensiFileValid)) {
-        //pesan gagal upload
         echo "<script>
                 alert('Yang anda upload bukan file gambar!');
                 document.location.href = 'tambah-mahasiswa.php';
@@ -110,7 +113,7 @@ function upload_file()
         die();
     }
 
-    //check ukura file
+    // check ukuran file (Maksimal 2MB)
     if ($ukuranFile > 2048000) {
         echo "<script>
                 alert('Ukuran file terlalu besar!');
@@ -119,16 +122,16 @@ function upload_file()
         die();
     }
 
-    //generate nama file baru
+    // generate nama file baru agar unik dan tidak tabrakan di server
     $namaFileBaru = uniqid();
     $namaFileBaru .= '.';
     $namaFileBaru .= $extensiFile;
 
-    //pindahkan file ke folder local
+    // pindahkan file dari tempat penyimpanan sementara ke folder project
     move_uploaded_file($tmpName, 'assets/img/' . $namaFileBaru);
     
     return $namaFileBaru;
-} 
+}
 
 //untuk menghapus data mahsiswa
 function delete_mahasiswa($id_mahasiswa)
@@ -156,7 +159,7 @@ function update_mahasiswa($data)
     $prodi   = strip_tags($data['prodi']);
     $jk      = strip_tags($data['jk']);
     $telepon = strip_tags($data['telepon']);
-    $alamat  = $post['alamat'];
+    $alamat  = strip_tags($data['alamat']); 
     $email   = strip_tags($data['email']);
     $fotoLama   = strip_tags($data['fotoLama']);
 
@@ -172,8 +175,16 @@ function update_mahasiswa($data)
         return false;
     }
 
-    //query ubah data
-    $query = "UPDATE mahasiswa SET nama = '$nama', prodi = '$prodi', jk = '$jk', telepon = '$telepon', alamat = $alamat, email = '$email', foto = '$foto' WHERE id_mahasiswa = $id_mahasiswa";
+    // PERBAIKAN 2: Menambahkan tanda petik tunggal '$alamat' pada query SQL
+    $query = "UPDATE mahasiswa SET 
+                nama = '$nama', 
+                prodi = '$prodi', 
+                jk = '$jk', 
+                telepon = '$telepon', 
+                alamat = '$alamat', 
+                email = '$email', 
+                foto = '$foto' 
+              WHERE id_mahasiswa = $id_mahasiswa";
 
     // Mengeksekusi query UPDATE
     mysqli_query($db, $query);

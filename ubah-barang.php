@@ -39,27 +39,58 @@ if (isset($_POST['ubah'])) {
 include 'layout/header.php';
 ?>
 
-<div class="container mt-5">
-    <h1>Ubah Barang</h1>
-    <hr>
+<!-- PERBAIKAN LAYOUT: Menggunakan wrapper AdminLTE -->
+<div class="content-wrapper">
+    <!-- Content Header (Judul Halaman) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">Ubah Barang</h1>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <form action="" method="post">
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <!-- Dibungkus Card AdminLTE agar form terlihat rapi dan clean -->
+            <div class="card">
+                <div class="card-body">
+                    
+                    <form action="" method="post">
+                        <!-- Input Hidden ID Barang -->
+                        <input type="hidden" name="id_barang" value="<?= $barang['id_barang']; ?>">
+                        
+                        <div class="mb-3">
+                            <label for="nama" class="form-label">Nama Barang</label>
+                            <input type="text" class="form-control" id="nama" name="nama" value="<?= $barang['nama']; ?>" placeholder="Nama Barang..." required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="jumlah" class="form-label">Jumlah</label>
+                            <input type="number" class="form-control" id="jumlah" name="jumlah" value="<?= $barang['jumlah']; ?>" placeholder="Jumlah Barang..." required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="harga" class="form-label">Harga Barang</label>
+                            <input type="number" class="form-control" id="harga" name="harga" value="<?= $barang['harga']; ?>" placeholder="Harga Barang..." required>
+                        </div>
+                        
+                        <hr>
+                        
+                        <!-- Mengganti style inline dengan class bawaan Bootstrap agar lebih rapi -->
+                        <div class="clearfix">
+                            <a href="index.php" class="btn btn-secondary float-left">Kembali</a>
+                            <button type="submit" name="ubah" class="btn btn-primary float-right">Ubah</button>
+                        </div>
+                    </form>
 
-        <input type="hidden" name="id_barang" value="<?= $barang['id_barang']; ?>">
-        <div class="mb-3">
-            <label for="nama" class="form-label">Nama Barang</label>
-            <input type="text" class="form-control" id="nama" name="nama" value="<?= $barang['nama']; ?>" placeholder="Nama Barang..." required>
+                </div>
+            </div>
         </div>
-        <div class="mb-3">
-            <label for="jumlah" class="form-label">Jumlah</label>
-            <input type="number" class="form-control" id="jumlah" name="jumlah" value="<?= $barang['jumlah']; ?>" placeholder="Jumlah Barang..." required>
-        </div>
-        <div class="mb-3">
-            <label for="harga" class="form-label">Harga Barang</label>
-            <input type="number" class="form-control" id="harga" name="harga" value="<?= $barang['harga']; ?>" placeholder="Harga Barang..." required>
-        </div>
-        <button type="submit" name="ubah" class="btn btn-primary" style="float: right;">Ubah</button>
-    </form>
+    </section>
 </div>
 
 <?php include 'layout/footer.php'; ?>

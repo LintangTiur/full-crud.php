@@ -73,7 +73,6 @@ if (isset($_POST['ubah'])) {
 
 <?php include 'layout/header.php'; ?>
 
-<!-- PERBAIKAN UTAMA: Menggunakan wrapper AdminLTE agar tidak tertutup sidebar -->
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <div class="content-header">
@@ -89,12 +88,11 @@ if (isset($_POST['ubah'])) {
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
-            <!-- Menggunakan Card AdminLTE agar tampilan tabel lebih rapi dan clean -->
             <div class="card">
                 <div class="card-body">
                     
                     <?php if ($_SESSION['level'] == 1) : ?>
-                    <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#modalTambah">
+                    <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#modalTambah">
                         <i class="fas fa-plus-circle"></i> Tambah 
                     </button>
                     <?php endif; ?>
@@ -126,10 +124,10 @@ if (isset($_POST['ubah'])) {
                                             <td><?= $akun['password']; ?></td>
                                             <td><?= $akun['level'] == 1 ? 'Admin' : 'Operator'; ?></td> 
                                             <td class="text-center">
-                                                <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalUbah<?= $akun['id_akun']; ?>">
+                                                <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modalUbah<?= $akun['id_akun']; ?>">
                                                     <i class="fas fa-edit"></i> Ubah
                                                 </button>
-                                                <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#modalHapus<?= $akun['id_akun']; ?>">
+                                                <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modalHapus<?= $akun['id_akun']; ?>">
                                                     <i class="fas fa-trash-alt"></i> Hapus
                                                 </button>
                                             </td>
@@ -146,7 +144,7 @@ if (isset($_POST['ubah'])) {
                                             <td><?= $akun['password']; ?></td>
                                             <td><?= $akun['level'] == 1 ? 'Admin' : 'Operator'; ?></td> 
                                             <td class="text-center">
-                                                <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalUbah<?= $akun['id_akun']; ?>">
+                                                <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modalUbah<?= $akun['id_akun']; ?>">
                                                     <i class="fas fa-edit"></i> Ubah
                                                 </button>
                                             </td>
@@ -161,42 +159,43 @@ if (isset($_POST['ubah'])) {
             </div>
         </div>
     </section>
-</div> <!-- Penutup content-wrapper -->
+</div>
+
+<!-- ==================== MODAL ZONE ==================== -->
 
 <!-- Modal Tambah -->
+<?php if ($_SESSION['level'] == 1) : ?>
 <div class="modal fade" id="modalTambah" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header bg-primary text-white">
         <h5 class="modal-title" id="exampleModalLabel">Tambah Akun</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
       </div>
-      
       <form action="" method="post">
         <div class="modal-body">
             <div class="mb-3">
                 <label for="nama">Nama</label>
-                <input type="text" name="nama" id="nama" class="form-control" required>
+                <input type="text" name="nama" class="form-control" required>
             </div>
-
             <div class="mb-3">
                 <label for="username">Username</label>
-                <input type="text" name="username" id="username" class="form-control" required>
+                <input type="text" name="username" class="form-control" required>
             </div>
-
             <div class="mb-3">
                 <label for="email">Email</label>
-                <input type="email" name="email" id="email" class="form-control" required>
+                <input type="email" name="email" class="form-control" required>
             </div>
-
             <div class="mb-3">
                 <label for="password">Password</label>
-                <input type="password" name="password" id="password" class="form-control" required minlength="6">
+                <!-- PERBAIKAN: Atribut minlength="6" telah dihapus -->
+                <input type="password" name="password" class="form-control" required>
             </div>
-
             <div class="mb-3">
                 <label for="level">Level</label>
-                <select name="level" id="level" class="form-control" required>
+                <select name="level" class="form-control" required>
                     <option value="">-- Pilih Level --</option>
                     <option value="1">Admin</option>
                     <option value="2">Operator Barang</option>
@@ -205,13 +204,14 @@ if (isset($_POST['ubah'])) {
             </div>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-            <button type="submit" name="tambah" class="btn btn-primary">Tambah</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Kembali</button>
+            <button type="submit" name="tambah" class="btn btn-primary">Simpan</button>
         </div>
-      </form> 
+      </form>
     </div>
   </div>
 </div>
+<?php endif; ?>
 
 <!-- Modal Hapus -->
 <?php foreach ($data_akun as $akun) : ?>
@@ -220,7 +220,9 @@ if (isset($_POST['ubah'])) {
     <div class="modal-content">
       <div class="modal-header bg-danger text-white">
         <h5 class="modal-title" id="exampleModalLabel">Hapus Akun</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
       </div>
       
       <form action="" method="post">
@@ -231,7 +233,7 @@ if (isset($_POST['ubah'])) {
         </div>
         
         <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kembali</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Kembali</button>
             <button type="submit" name="hapus" class="btn btn-danger">Hapus</button>
         </div>
       </form>
@@ -247,7 +249,9 @@ if (isset($_POST['ubah'])) {
     <div class="modal-content">
       <div class="modal-header bg-success text-white">
         <h5 class="modal-title" id="exampleModalLabel">Ubah Akun</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
       </div>
       
       <form action="" method="post">
@@ -271,7 +275,8 @@ if (isset($_POST['ubah'])) {
 
             <div class="mb-3">
                 <label for="password">Password <small>(Masukkan password baru/lama)</small></label>
-                <input type="password" name="password" id="password" class="form-control" required minlength="6">
+                <!-- PERBAIKAN: Atribut minlength="6" telah dihapus -->
+                <input type="password" name="password" id="password" class="form-control" required>
             </div>
 
             <?php if ($_SESSION['level'] == 1) : ?>
@@ -287,10 +292,10 @@ if (isset($_POST['ubah'])) {
             <?php else  : ?>
                 <input type="hidden" name="level" value="<?= $akun['level']; ?>">
             <?php endif; ?>
-            </div>
+        </div>
 
         <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kembali</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Kembali</button>
             <button type="submit" name="ubah" class="btn btn-success">Ubah</button>
         </div>
       </form> 
