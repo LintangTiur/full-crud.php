@@ -35,6 +35,9 @@ include 'config/app.php';
   <link rel="stylesheet" href="assets-template/plugins/daterangepicker/daterangepicker.css">
   <!-- summernote -->
   <link rel="stylesheet" href="assets-template/plugins/summernote/summernote-bs4.min.css">
+
+  <!-- jQuery -->
+  <script src="assets-template/plugins/jquery/jquery.min.js"></script>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -230,6 +233,12 @@ include 'config/app.php';
                 <a href="mahasiswa.php" class="nav-link">
                     <i class="nav-icon fas fa-user-graduate"></i>
                     <p>Data Mahasiswa</p>
+                </a>
+            </li>
+              <li class="nav-item">
+                <a href="pegawai.php" class="nav-link">
+                    <i class="nav-icon fas fa-user-graduate"></i>
+                    <p>Data Pegawai (Realtime)</p>
                 </a>
             </li>
             <li class="nav-item">
