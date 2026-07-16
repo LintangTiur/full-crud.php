@@ -61,7 +61,7 @@ $data_mahasiswa = select("SELECT * FROM mahasiswa ORDER BY id_mahasiswa DESC");
                 <div class="card-body">
                     <!-- OPTIMASI: Dibungkus table-responsive agar tabel aman di layar kecil -->
                     <div class="table-responsive">
-                        <table id="example" class="table table-bordered table-striped align-middle">
+                        <table id="serverside" class="table table-bordered table-striped align-middle">
                             <thead>
                                 <tr>
                                     <th>No</th>
@@ -69,7 +69,6 @@ $data_mahasiswa = select("SELECT * FROM mahasiswa ORDER BY id_mahasiswa DESC");
                                     <th>Prodi</th>
                                     <th>Jenis Kelamin</th>
                                     <th>Telepon</th>
-                                    <th>Email</th>
                                     <th class="text-center">Aksi</th>
                                 </tr>
                             </thead>
@@ -82,14 +81,11 @@ $data_mahasiswa = select("SELECT * FROM mahasiswa ORDER BY id_mahasiswa DESC");
                                         <td><?= $mahasiswa["prodi"] ?></td>
                                         <td><?= $mahasiswa["jk"] ?></td>
                                         <td><?= $mahasiswa["telepon"] ?></td>
-                                        <td><?= $mahasiswa["email"] ?></td>
-
+                                        <!-- tombol -->
                                         <td width="20%" class="text-center">
-                                            <!-- Tombol aksi dikasih margin kecil (mx-1) agar tidak menempel rapat -->
-                                            <a href="detail-mahasiswa.php?id_mahasiswa=<?= $mahasiswa['id_mahasiswa']; ?>" class="btn btn-secondary btn-sm mx-1">Detail</a>
-                                            <a href="ubah-mahasiswa.php?id_mahasiswa=<?= $mahasiswa['id_mahasiswa']; ?>" class="btn btn-success btn-sm mx-1">Ubah</a>
-                                            <a href="hapus-mahasiswa.php?id_mahasiswa=<?= $mahasiswa['id_mahasiswa']; ?>" class="btn btn-danger btn-sm mx-1"
-                                                onclick="return confirm('Yakin ingin menghapus data?');">Hapus</a>
+                                        <a href="detail-mahasiswa.php?id_mahasiswa=<?= $mahasiswa['id_mahasiswa']; ?>" class="btn btn-secondary btn-sm"><i class="fas fa-eye"></i> Detail</a>
+                                        <a href="ubah-mahasiswa.php?id_mahasiswa=<?= $mahasiswa['id_mahasiswa']; ?>" class="btn btn-success btn-sm"><i class="fas fa-edit"></i> Ubah</a>
+                                        <a href="hapus-mahasiswa.php?id_mahasiswa=<?= $mahasiswa['id_mahasiswa']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin Data Mahasiswa Akan Dihapus.?');"><i class="fas fa-trash-alt"></i> Hapus</a>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>

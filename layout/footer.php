@@ -61,10 +61,37 @@
 <script src="assets-template/plugins/datatables-buttons/js/buttons.print.min.js"></script>
 <script src="assets-template/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
 <script>
-  $(function () {
-    $('#example1').DataTable({
-    });
+
+  // datatable client side
+  <script>
+      $(function () {
+          $("#example").DataTable();
   });
-</script>
+  </script>
+
+
+// datatable serverside
+  <script>
+    $(document).ready(function(){
+      $('#serverside').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: {
+          "url": "mahasiswa-serverside.php?action=table_data", // handle action datatable
+          "dataType": "JSON",
+          "type": "POST"
+          },
+          columns: [
+            {"data": "no"},
+            {"data": "nama"},
+            {"data": "prodi"},
+            {"data": "jk"},
+            {"data": "telepon"},
+            {"data": "aksi"},
+          ]
+      })
+    })
+  </script>
+
 </body>
 </html>

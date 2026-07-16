@@ -104,8 +104,14 @@ if (isset($_POST['login'])) {
       <label for="floatingPassword">Password</label>
     </div>
 
+    <div>
+      <div class="g-recaptcha" data-sitekey="6LcOdVYtAAAAALFOsjXcOivy9a4SiWkZ-WERZ2dt"></div>
+    </div>
+
+    <script src="https://www.google.com/recaptcha/api.js".></script>
+
     <button class="w-100 btn btn-lg btn-primary" type="submit" name="login">Login</button>
-    <p class="mt-5 mb-3 text-muted">&copy; 2017–2021</p>
+    <p class="mt-5 mb-3 text-muted">&copy; 2024-2027</p>
   </form>
 </main>
 

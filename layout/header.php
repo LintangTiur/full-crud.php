@@ -57,9 +57,6 @@ include 'config/app.php';
       <li class="nav-item d-none d-sm-inline-block">
         <a href="index.php" class="nav-link">Home</a>
       </li>
-      <li class="nav-item d-none d-sm-inline-block">
-        <a href="#" class="nav-link">Contact</a>
-      </li>
     </ul>
 
     <!-- Right navbar links -->
@@ -239,6 +236,12 @@ include 'config/app.php';
                 <a href="pegawai.php" class="nav-link">
                     <i class="nav-icon fas fa-user-graduate"></i>
                     <p>Data Pegawai (Realtime)</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="email.php" class="nav-link">
+                    <i class="nav-icon fas fa-envelope"></i>
+                    <p>Kirim Email (PHPMailer)</p>
                 </a>
             </li>
             <li class="nav-item">

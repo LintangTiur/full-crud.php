@@ -30,7 +30,13 @@
         $data_barang = select("SELECT * FROM barang WHERE tanggal BETWEEN '$tgl_awal' AND '$tgl_akhir' ORDER BY id_barang DESC");
     } else {
         // query tampil seluruh data
-        $data_barang = select("SELECT * FROM barang ORDER BY id_barang DESC");
+        $jumlahDataPerhalaman = 1;
+        $jumlahData           = count(select("SELECT * FROM barang"));
+        $jumlahHalaman        = ceil($jumlahData / $jumlahDataPerhalaman);
+        $halamanAktif         = (isset($_GET['halaman']) ?  $_GET['halaman'] : 1);
+        $awalData             = ($jumlahDataPerhalaman * $halamanAktif) - $jumlahDataPerhalaman;
+
+        $data_barang = select("SELECT * FROM barang ORDER BY id_barang DESC LIMIT $awalData, $jumlahDataPerhalaman");
     }
 ?>
 
@@ -122,10 +128,9 @@
             <!-- ./col -->
             </div>
             <!-- /.row -->
-            <!-- Main content -->
-        <section class="content">
-        <div class="container-fluid">
-            <div class="row">
+            
+            <!-- Area Tabel Data Barang -->
+            <div class="row mt-4">
             <div class="col-12">
                 <div class="card">
                 <div class="card-header">
@@ -133,59 +138,95 @@
                 </div>
                 <!-- /.card-header -->
 
-
                 <div class="card-body">
-                <a href="tambah-barang.php" class="btn btn-primary mb-1"><i class="fas fa-plus"></i> Tambah Barang</a>
+                    <a href="tambah-barang.php" class="btn btn-primary mb-1"><i class="fas fa-plus"></i> Tambah Barang</a>
 
-                <button type="button" class="btn btn-success btn-sm mb-2" data-toggle="modal" data-target="#modalFilter">
-                    <i class="fas fa-search"></i> Filter Data
-                </button>  
+                    <button type="button" class="btn btn-success btn-sm mb-2" data-toggle="modal" data-target="#modalFilter">
+                        <i class="fas fa-search"></i> Filter Data
+                    </button>  
 
-                <table class="table table-bordered table-striped">
+                    <table class="table table-bordered table-striped">
                         <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Nama</th>
-                        <th>Jumlah</th>
-                        <th>Harga</th>
-                        <th>Barcode</th>
-                        <th>Tanggal</th>
-                        <th>Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php $no = 1; ?>
-                    <?php foreach ($data_barang as $barang) : ?>
-                    <tr>
-                        <td><?= $no++; ?></td>
-                        <td><?= $barang["nama"] ?></td>
-                        <td><?= $barang["jumlah"] ?></td>
-                        <!-- format rupiah -->
-                        <td>Rp<?= number_format($barang["harga"],0,',','.')  ?></td>
-                        <!-- barcode -->
-                        <td class="text-center">
-                            <img src="barcode.php?codetype=Code128&size=30&text=<?= $barang['barcode']; ?>&print=true" alt="barcode">
-                        </td>
-                        <!-- format tanggal indonesia -->
-                        <td><?= date("d/m/Y | H:i:s", strtotime($barang["tanggal"])); ?></td>
-                        <td width="15%" class="text-center">
-                            <a href="ubah-barang.php?id_barang=<?= $barang['id_barang']; ?>" class="btn btn-primary">Ubah</a>
-                            <a href="hapus-barang.php?id_barang=<?= $barang['id_barang']; ?>" class="btn btn-danger"
-                            onclick="return confirm('Yakin ingin menghapus barang?');">Hapus</a>
-                        </td>
-                    </tr>
-                    <?php endforeach; ?>
+                            <tr>
+                                <th>No</th>
+                                <th>Nama</th>
+                                <th>Jumlah</th>
+                                <th>Harga</th>
+                                <th>Barcode</th>
+                                <th>Tanggal</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php $no = 1; ?>
+                            <?php foreach ($data_barang as $barang) : ?>
+                            <tr>
+                                <td><?= $no++; ?></td>
+                                <td><?= $barang["nama"] ?></td>
+                                <td><?= $barang["jumlah"] ?></td>
+                                <!-- format rupiah -->
+                                <td>Rp<?= number_format($barang["harga"],0,',','.')  ?></td>
+                                <!-- barcode -->
+                                <td class="text-center">
+                                    <img src="barcode.php?codetype=Code128&size=30&text=<?= $barang['barcode']; ?>&print=true" alt="barcode">
+                                </td>
+                                <!-- format tanggal indonesia -->
+                                <td><?= date("d/m/Y | H:i:s", strtotime($barang["tanggal"])); ?></td>
+                                <td width="15%" class="text-center">
+                                    <a href="ubah-barang.php?id_barang=<?= $barang['id_barang']; ?>" class="btn btn-primary">Ubah</a>
+                                    <a href="hapus-barang.php?id_barang=<?= $barang['id_barang']; ?>" class="btn btn-danger"
+                                    onclick="return confirm('Yakin ingin menghapus barang?');">Hapus</a>
+                                </td>
+                            </tr>
+                            <?php endforeach; ?>
+                        </tbody>
                     </table>
                 </div>
                 <!-- /.card-body -->
+
+                <!-- KODE PAGINATION DI SINI -->
+                <div class="card-footer clearfix">
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination">
+                            <?php if ($halamanAktif > 1) : ?>
+                            <li class="page-item">
+                                <a class="page-link" href="?halaman=<?= $halamanAktif - 1 ?>" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                            <?php endif; ?>
+                            
+                            <?php for ($i = 1; $i <= $jumlahHalaman; $i++) : ?>
+                                <?php if ($i == $halamanAktif) : ?>
+                            <li class="page-item active"><a class="page-link" href="?halaman=<?= $i; ?>"><?= $i; ?></a></li>
+                            <?php else : ?>
+                            <li class="page-item"><a class="page-link" href="?halaman=<?= $i; ?>"><?= $i; ?></a></li>
+                            <?php endif; ?>
+                            <?php endfor; ?>
+
+                            <?php if ($halamanAktif < $jumlahHalaman) : ?>
+                                <li class="page-item">
+                                <a class="page-link" href="?halaman=<?= $halamanAktif + 1 ?>" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                            <?php endif; ?>
+                        </ul>
+                    </nav>
+                </div>
+                <!-- /.card-footer -->
+
                 </div>
                 <!-- /.card -->
             </div>
             <!-- /.col -->
             </div>
+            <!-- /.row -->
         </div>
         <!-- /.container-fluid -->
         </section>
+    </div>
+    <!-- /.content-wrapper -->
         
 <!-- Modal Filter -->
 <div class="modal fade" id="modalFilter" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
