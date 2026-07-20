@@ -1,6 +1,6 @@
 <?php
 
-$db = mysqli_connect("127.0.0.1", "root", "", "crud-php");
+$db = mysqli_connect("localhost", "root", "", "crud-php");
 
 // if (!$db) {
 //     echo "gagal";

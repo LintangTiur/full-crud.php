@@ -22,6 +22,22 @@ $title = "Daftar Mahasiswa";
 include 'layout/header.php';
 
 $data_mahasiswa = select("SELECT * FROM mahasiswa ORDER BY id_mahasiswa DESC");
+
+// KODE TAMBAHAN: AMBIL DATA UNTUK GRAFIK LINE
+$query_grafik = mysqli_query($db, "SELECT prodi, 
+    SUM(CASE WHEN jk = 'Laki-laki' THEN 1 ELSE 0 END) AS total_lakilaki,
+    SUM(CASE WHEN jk = 'Perempuan' THEN 1 ELSE 0 END) AS total_perempuan 
+    FROM mahasiswa GROUP BY prodi");
+
+$prodi_labels = [];
+$data_laki = [];
+$data_perempuan = [];
+
+while ($row = mysqli_fetch_assoc($query_grafik)) {
+    $prodi_labels[] = $row['prodi'];
+    $data_laki[]   = (int)$row['total_lakilaki'];
+    $data_perempuan[] = (int)$row['total_perempuan'];
+}
 ?>
 
 <!-- PERBAIKAN STRUKTUR: Menggunakan standar layout AdminLTE 3 -->
@@ -43,6 +59,21 @@ $data_mahasiswa = select("SELECT * FROM mahasiswa ORDER BY id_mahasiswa DESC");
     <section class="content">
         <div class="container-fluid">
             
+
+            <!-- KODE TAMBAHAN: CARD UNTUK TAMPILAN GRAFIK LINE -->
+            <div class="card card-primary card-outline">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-chart-line"></i> Grafik Mahasiswa
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="chart">
+                        <canvas id="grafikMahasiswa" style="min-height: 280px; height: 280px; max-height: 280px; max-width: 100%;"></canvas>
+                    </div>
+                </div>
+            </div>
+
             <!-- Menggunakan Card AdminLTE agar instan rapi dan clean -->
             <div class="card">
                 <div class="card-header pb-0 border-0">
@@ -98,5 +129,52 @@ $data_mahasiswa = select("SELECT * FROM mahasiswa ORDER BY id_mahasiswa DESC");
         </div>
     </section>
 </div> <!-- FIXED: Tag penutup untuk content-wrapper yang krusial -->
+
+
+<!-- KODE TAMBAHAN: INISIALISASI PLUG-IN CHART.JS LINE -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const ctx = document.getElementById('grafikMahasiswa').getContext('2d');
+    
+    new Chart(ctx, {
+        type: 'line', 
+        data: {
+            labels: <?= json_encode($prodi_labels); ?>,
+            datasets: [
+                {
+                    label: 'Laki-laki',
+                    data: <?= json_encode($data_laki); ?>,
+                    borderColor: '#007bff',
+                    backgroundColor: '#007bff',
+                    fill: false,
+                    tension: 0.2
+                },
+                {
+                    label: 'Perempuan',
+                    data: <?= json_encode($data_perempuan); ?>,
+                    borderColor: '#fd7e14',
+                    backgroundColor: '#fd7e14',
+                    fill: false,
+                    tension: 0.2
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                // FIXED: Struktur skala khusus Chart.js bawaan AdminLTE 3
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true,
+                        stepSize: 1, // Memaksa lompatan angka bulat
+                        precision: 0 // Menghilangkan desimal belakangan
+                    }
+                }]
+            }
+        }
+    });
+});
+</script>
 
 <?php include 'layout/footer.php' ?>
